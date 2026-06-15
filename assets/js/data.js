@@ -32,63 +32,63 @@ window.DATA = (function () {
   // price は税込価格(JPY)。salePrice があればセール価格。
   var products = [
     // --- WOMEN ---
-    { item_id: '351001', item_name: 'エアリズムコットン オーバーサイズT（半袖）', item_brand: 'UNILO',
+    { item_id: '351001', item_name: 'エアリズムコットン オーバーサイズT（半袖）', item_brand: 'PG-Training',
       item_category: 'ウィメンズ', item_category2: 'トップス', categoryKey: 'women',
       price: 1500, colors: ['ホワイト', 'ブラック', 'ライトグレー', 'ピンク'],
       sizes: ['XS', 'S', 'M', 'L', 'XL'], desc: 'さらっと快適なエアリズムコットン。一枚でもインナーでも。' },
-    { item_id: '455002', item_name: 'ウルトラライトダウン コンパクトジャケット', item_brand: 'UNILO',
+    { item_id: '455002', item_name: 'ウルトラライトダウン コンパクトジャケット', item_brand: 'PG-Training',
       item_category: 'ウィメンズ', item_category2: 'アウター', categoryKey: 'women',
       price: 6990, colors: ['ブラック', 'ネイビー', 'ベージュ', 'オフホワイト'],
       sizes: ['S', 'M', 'L', 'XL'], desc: '軽くて暖かい定番ダウン。専用ポーチで持ち運びもラク。' },
-    { item_id: '339003', item_name: 'ワイドフィット カーブパンツ', item_brand: 'UNILO',
+    { item_id: '339003', item_name: 'ワイドフィット カーブパンツ', item_brand: 'PG-Training',
       item_category: 'ウィメンズ', item_category2: 'ボトムス', categoryKey: 'women',
       price: 3990, colors: ['ナチュラル', 'ブラック', 'ブラウン'],
       sizes: ['S', 'M', 'L', 'XL'], desc: '体型を拾いにくいカーブシルエット。きれいめにもカジュアルにも。' },
-    { item_id: '446004', item_name: 'ヒートテック リブクルーネックT（長袖）', item_brand: 'UNILO',
+    { item_id: '446004', item_name: 'ヒートテック リブクルーネックT（長袖）', item_brand: 'PG-Training',
       item_category: 'ウィメンズ', item_category2: 'インナー', categoryKey: 'women',
       price: 1500, colors: ['ブラック', 'ベージュ', 'グレー', 'ワイン'],
       sizes: ['XS', 'S', 'M', 'L', 'XL'], desc: '発熱・保温の定番インナー。リブ素材で一枚見えもOK。' },
     // --- MEN ---
-    { item_id: '422005', item_name: 'スーピマコットン クルーネックT（半袖）', item_brand: 'UNILO',
+    { item_id: '422005', item_name: 'スーピマコットン クルーネックT（半袖）', item_brand: 'PG-Training',
       item_category: 'メンズ', item_category2: 'トップス', categoryKey: 'men',
       price: 1500, colors: ['ホワイト', 'ブラック', 'ネイビー', 'グレー'],
       sizes: ['S', 'M', 'L', 'XL', 'XXL'], desc: '上質なスーピマコットン100%。なめらかな肌触り。' },
-    { item_id: '433006', item_name: 'フランネル チェックシャツ（長袖）', item_brand: 'UNILO',
+    { item_id: '433006', item_name: 'フランネル チェックシャツ（長袖）', item_brand: 'PG-Training',
       item_category: 'メンズ', item_category2: 'シャツ', categoryKey: 'men',
       price: 2990, colors: ['レッド', 'ブルー', 'グリーン'],
       sizes: ['S', 'M', 'L', 'XL', 'XXL'], desc: '起毛感が暖かいフランネル。羽織りにも一枚にも。' },
-    { item_id: '459007', item_name: '感動パンツ（ウールライク）', item_brand: 'UNILO',
+    { item_id: '459007', item_name: '感動パンツ（ウールライク）', item_brand: 'PG-Training',
       item_category: 'メンズ', item_category2: 'ボトムス', categoryKey: 'men',
       price: 3990, colors: ['ダークグレー', 'ブラック', 'ネイビー'],
       sizes: ['S', 'M', 'L', 'XL', 'XXL'], desc: '軽量ストレッチで動きやすい。ビジネスにも休日にも。' },
-    { item_id: '455008', item_name: 'ウルトラライトダウン ジャケット', item_brand: 'UNILO',
+    { item_id: '455008', item_name: 'ウルトラライトダウン ジャケット', item_brand: 'PG-Training',
       item_category: 'メンズ', item_category2: 'アウター', categoryKey: 'men',
       price: 6990, colors: ['ブラック', 'ネイビー', 'オリーブ', 'ベージュ'],
       sizes: ['S', 'M', 'L', 'XL', 'XXL'], desc: '軽量で暖かい定番ダウン。インナーダウンとしても。' },
     // --- KIDS ---
-    { item_id: '511009', item_name: 'スウェット プルパーカ（長袖）', item_brand: 'UNILO',
+    { item_id: '511009', item_name: 'スウェット プルパーカ（長袖）', item_brand: 'PG-Training',
       item_category: 'キッズ', item_category2: 'トップス', categoryKey: 'kids',
       price: 1990, colors: ['グレー', 'ネイビー', 'イエロー'],
       sizes: ['100', '110', '120', '130', '140', '150', '160'], desc: '動きやすく丈夫なスウェット。普段使いの定番。' },
-    { item_id: '512010', item_name: 'ウルトラストレッチ チノパンツ', item_brand: 'UNILO',
+    { item_id: '512010', item_name: 'ウルトラストレッチ チノパンツ', item_brand: 'PG-Training',
       item_category: 'キッズ', item_category2: 'ボトムス', categoryKey: 'kids',
       price: 1990, colors: ['ベージュ', 'ブラック', 'カーキ'],
       sizes: ['100', '110', '120', '130', '140', '150', '160'], desc: 'よく伸びて動きやすい。元気に遊べるチノパン。' },
     // --- BABY ---
-    { item_id: '611011', item_name: 'クルーネックボディスーツ（3枚組）', item_brand: 'UNILO',
+    { item_id: '611011', item_name: 'クルーネックボディスーツ（3枚組）', item_brand: 'PG-Training',
       item_category: 'ベビー', item_category2: 'インナー', categoryKey: 'baby',
       price: 1290, colors: ['アソート'],
       sizes: ['60', '70', '80', '90'], desc: '肌にやさしいコットン。使い勝手のよい3枚組。' },
-    { item_id: '612012', item_name: 'メッシュ レギンス', item_brand: 'UNILO',
+    { item_id: '612012', item_name: 'メッシュ レギンス', item_brand: 'PG-Training',
       item_category: 'ベビー', item_category2: 'ボトムス', categoryKey: 'baby',
       price: 990, colors: ['ネイビー', 'ピンク', 'グレー'],
       sizes: ['70', '80', '90', '100'], desc: '通気性のよいメッシュ素材。おむつ替えもしやすい。' },
     // --- SALE（salePrice 付き） ---
-    { item_id: '422013', item_name: 'デニムジャケット', item_brand: 'UNILO',
+    { item_id: '422013', item_name: 'デニムジャケット', item_brand: 'PG-Training',
       item_category: 'メンズ', item_category2: 'アウター', categoryKey: 'men',
       price: 3990, salePrice: 2990, colors: ['ライトブルー', 'インディゴ'],
       sizes: ['S', 'M', 'L', 'XL', 'XXL'], desc: '定番のデニムジャケット。今だけ特別価格。' },
-    { item_id: '351014', item_name: 'リネンブレンド シャツ（長袖）', item_brand: 'UNILO',
+    { item_id: '351014', item_name: 'リネンブレンド シャツ（長袖）', item_brand: 'PG-Training',
       item_category: 'ウィメンズ', item_category2: 'シャツ', categoryKey: 'women',
       price: 2990, salePrice: 1990, colors: ['ホワイト', 'ブルー', 'ベージュ'],
       sizes: ['XS', 'S', 'M', 'L', 'XL'], desc: '春夏に活躍するリネン混。今だけ特別価格。' }
@@ -114,8 +114,17 @@ window.DATA = (function () {
   // 実効価格（セールがあればセール価格）
   function effectivePrice(p) { return p.salePrice != null ? p.salePrice : p.price; }
 
+  // 商品画像(SVGイラスト)の形状タイプ。item_idごとに衣服の種類を割り当てる。
+  var shapes = {
+    '351001': 'tshirt', '455002': 'jacket', '339003': 'pants', '446004': 'longsleeve',
+    '422005': 'tshirt', '433006': 'shirt', '459007': 'pants', '455008': 'jacket',
+    '511009': 'hoodie', '512010': 'pants', '611011': 'bodysuit', '612012': 'leggings',
+    '422013': 'jacket', '351014': 'shirt'
+  };
+  function shapeOf(p) { var id = (p && p.item_id) ? p.item_id : p; return shapes[id] || 'tshirt'; }
+
   return {
-    brand: 'UNILO',
+    brand: 'PG-Training',
     currency: 'JPY',
     colorHex: colorHex,
     categories: categories,
@@ -123,6 +132,7 @@ window.DATA = (function () {
     getById: getById,
     getByCategory: getByCategory,
     getFeatured: getFeatured,
-    effectivePrice: effectivePrice
+    effectivePrice: effectivePrice,
+    shapeOf: shapeOf
   };
 })();

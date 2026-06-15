@@ -23,12 +23,33 @@ window.App = (function () {
     return '<span class="price">' + yen(p.price) + '</span>';
   }
 
-  // 商品サムネイル（画像の代わりに服のカラーを大きく見せる色ブロック）
+  // 商品画像: カテゴリ別の衣服シルエットをSVGで描き、選択カラーで塗る(外部画像に依存しない)
+  function garment(shape, hex) {
+    var S = '#00000026';
+    var body = function (d) { return '<path d="' + d + '" fill="' + hex + '" stroke="#00000033" stroke-width="1.6" stroke-linejoin="round"/>'; };
+    var det = function (d) { return '<path d="' + d + '" fill="none" stroke="' + S + '" stroke-width="1.3" stroke-linecap="round"/>'; };
+    var dot = function (x, y) { return '<circle cx="' + x + '" cy="' + y + '" r="1.4" fill="' + S + '"/>'; };
+    var ls = 'M38 22 L30 17 L12 33 L18 74 L29 70 L31 104 L69 104 L71 70 L82 74 L88 33 L70 17 L62 22 C57 30 43 30 38 22 Z';
+    var g;
+    switch (shape) {
+      case 'longsleeve': g = body(ls) + det('M40 21 Q50 28 60 21'); break;
+      case 'hoodie': g = body('M37 22 Q50 4 63 22 Q56 31 50 31 Q44 31 37 22 Z') + body('M38 24 L30 19 L12 35 L18 76 L29 72 L31 104 L69 104 L71 72 L82 76 L88 35 L70 19 L62 24 C57 31 43 31 38 24 Z') + det('M37 80 L63 80 L59 97 L41 97 Z') + det('M46 30 L45 42') + det('M54 30 L55 42'); break;
+      case 'jacket': g = body(ls) + body('M40 20 L50 27 L44 34 Z') + body('M60 20 L50 27 L56 34 Z') + det('M50 27 L50 104') + det('M33 50 L67 50') + det('M33 66 L67 66') + det('M33 82 L67 82'); break;
+      case 'shirt': g = body(ls) + body('M40 19 L50 29 L43 33 Z') + body('M60 19 L50 29 L57 33 Z') + det('M50 29 L50 104') + dot(50, 46) + dot(50, 60) + dot(50, 74) + dot(50, 88); break;
+      case 'pants': g = body('M33 22 L67 22 L69 104 L55 104 L50 60 L45 104 L31 104 Z') + det('M33 29 L67 29') + det('M50 29 L50 60'); break;
+      case 'leggings': g = body('M38 22 L62 22 L64 104 L53 104 L50 62 L47 104 L36 104 Z') + det('M38 28 L62 28') + det('M50 28 L50 62'); break;
+      case 'bodysuit': g = body('M38 24 L31 20 L16 31 L24 44 L33 38 L33 82 Q50 100 67 82 L67 38 L76 44 L84 31 L69 20 L62 24 C57 31 43 31 38 24 Z') + det('M40 23 Q50 30 60 23') + dot(45, 90) + dot(50, 91) + dot(55, 90); break;
+      default: g = body('M38 22 L30 17 L13 30 L21 45 L31 39 L31 104 L69 104 L69 39 L79 45 L87 30 L70 17 L62 22 C57 30 43 30 38 22 Z') + det('M40 21 Q50 28 60 21');
+    }
+    return '<svg class="garment" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + g + '</svg>';
+  }
+
+  // 商品サムネイル（衣服SVGを選択カラーで塗って表示）
   function thumb(p, color) {
     var c = color || (p.colors && p.colors[0]) || 'グレー';
     var hex = (window.DATA.colorHex[c]) || '#cccccc';
-    var border = (hex.toLowerCase() === '#ffffff') ? ' thumb__swatch--bordered' : '';
-    return '<div class="thumb"><span class="thumb__swatch' + border + '" style="background:' + hex + '"></span></div>';
+    var shape = window.DATA.shapeOf ? window.DATA.shapeOf(p) : 'tshirt';
+    return '<div class="thumb">' + garment(shape, hex) + '</div>';
   }
 
   // 商品カード（一覧・トップで使用）
@@ -88,7 +109,7 @@ window.App = (function () {
       '<div class="demo-bar">これは GTM / GA4 計測の検証用デモサイトです（計測IDはプレースホルダ）。実際の購入はできません。</div>' +
       '<header class="site-header">' +
         '<div class="header-inner">' +
-          '<a class="logo" href="index.html">UNILO</a>' +
+          '<a class="logo" href="index.html">PG-Training</a>' +
           '<nav class="global-nav">' + nav + '</nav>' +
           '<div class="header-icons">' +
             '<span class="icon-btn" title="検索">' + iconSearch + '</span>' +
@@ -107,12 +128,12 @@ window.App = (function () {
     el.innerHTML = '' +
       '<footer class="site-footer">' +
         '<div class="footer-cols">' +
-          '<div class="footer-col"><h4>ABOUT UNILO</h4><a href="#">ブランドについて</a><a href="#">サステナビリティ</a><a href="#">店舗一覧</a></div>' +
+          '<div class="footer-col"><h4>ABOUT PG-Training</h4><a href="#">ブランドについて</a><a href="#">サステナビリティ</a><a href="#">店舗一覧</a></div>' +
           '<div class="footer-col"><h4>ヘルプ</h4><a href="#">よくあるご質問</a><a href="#">配送について</a><a href="#">返品・交換</a></div>' +
           '<div class="footer-col"><h4>カテゴリー</h4><a href="list.html?category=women">WOMEN</a><a href="list.html?category=men">MEN</a><a href="list.html?category=kids">KIDS</a></div>' +
           '<div class="footer-col"><h4>フォロー</h4><a href="#">メールマガジン</a><a href="#">アプリ</a><a href="#">SNS</a></div>' +
         '</div>' +
-        '<p class="footer-bottom">&copy; 2026 UNILO (demo). GTM / GA4 計測検証用のデモサイトです。</p>' +
+        '<p class="footer-bottom">&copy; 2026 PG-Training (demo). GTM / GA4 計測検証用のデモサイトです。</p>' +
       '</footer>';
   }
 

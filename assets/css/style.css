@@ -155,11 +155,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   aspect-ratio: 3 / 4; display: flex; align-items: center; justify-content: center;
   overflow: hidden; transition: box-shadow .15s;
 }
-.thumb__swatch {
-  width: 62%; height: 62%; border-radius: 6px;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
-}
-.thumb__swatch--bordered { box-shadow: inset 0 0 0 1px var(--line); }
+.garment { width: 80%; height: 88%; display: block; }
 .product-card__body { padding: var(--space-3) 2px 0; }
 .product-card__cat { font-size: var(--fs-xs); color: var(--ink-sub); }
 .product-card__name {
@@ -180,7 +176,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center;
   position: sticky; top: calc(var(--header-h) + var(--space-4));
 }
-.pdp__gallery .thumb__swatch { width: 55%; height: 55%; border-radius: 8px; }
+.pdp__gallery .thumb { background: transparent; aspect-ratio: auto; width: 100%; height: 100%; }
+.pdp__gallery .garment { width: 66%; height: 72%; }
 .pdp__cat { font-size: var(--fs-sm); color: var(--ink-sub); }
 .pdp__name { font-size: var(--fs-xl); font-weight: 800; margin-top: var(--space-2); line-height: 1.4; }
 .pdp__id { font-size: var(--fs-xs); color: var(--ink-sub); margin-top: var(--space-2); }
