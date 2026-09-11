@@ -116,14 +116,38 @@ window.App = (function () {
           '<a class="logo" href="index.html">PG-Training</a>' +
           '<nav class="global-nav" id="global-nav">' + nav + '</nav>' +
           '<div class="header-icons">' +
-            '<span class="icon-btn" title="検索">' + iconSearch + '</span>' +
+            '<button class="icon-btn search-toggle" type="button" title="検索" aria-label="検索" aria-expanded="false" aria-controls="search-bar">' + iconSearch + '</button>' +
             '<a class="icon-btn" href="' + accountHref + '" title="アカウント">' + iconUser + '</a>' +
             '<a class="icon-btn" href="cart.html" title="カート">' + iconCart +
               '<span class="cart-count" data-cart-count' + (count ? '' : ' hidden') + '>' + count + '</span>' +
             '</a>' +
           '</div>' +
         '</div>' +
+        // 検索バー(既定は非表示。虫眼鏡で開閉)。送信すると search.html?q= へ遷移し、そこで search イベントを積む。
+        '<form class="search-bar" id="search-bar" action="search.html" method="get" role="search" hidden>' +
+          '<div class="search-bar__inner">' +
+            '<input class="search-bar__input" type="search" name="q" placeholder="商品名・カテゴリで検索" aria-label="検索キーワード" autocomplete="off">' +
+            '<button class="search-bar__submit" type="submit">検索</button>' +
+          '</div>' +
+        '</form>' +
       '</header>';
+
+    // 検索バーの開閉。開いたら入力にフォーカス。空のまま送信はしない。
+    var searchToggle = el.querySelector('.search-toggle');
+    var searchBar = el.querySelector('.search-bar');
+    if (searchToggle && searchBar) {
+      var searchInput = searchBar.querySelector('.search-bar__input');
+      searchInput.value = getParam('q') || '';
+      searchToggle.addEventListener('click', function () {
+        var open = searchBar.hasAttribute('hidden');
+        if (open) { searchBar.removeAttribute('hidden'); searchInput.focus(); }
+        else { searchBar.setAttribute('hidden', ''); }
+        searchToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      searchBar.addEventListener('submit', function (e) {
+        if (!searchInput.value.trim()) { e.preventDefault(); searchInput.focus(); }
+      });
+    }
 
     // ハンバーガーのトグル(モバイル)。デスクトップはCSSでボタン非表示のため無影響。
     var header = el.querySelector('.site-header');
@@ -165,11 +189,10 @@ window.App = (function () {
   }
 
   // 計測順序の保証:
-  // ユーザープロパティ / user_id は「ページ固有のeコマースイベント(view_item / purchase 等)より
-  // 必ず前」に dataLayer へ積む必要がある。common.js は data/store/datalayer の後、body末尾で
-  // 読み込まれるので、ここで同期実行すれば、各ページの DOMContentLoaded 内で発火するイベントより
-  // 確実に先になる(スクリプトの記述順に依存せず順序を保証できる)。
-  window.DL.setUser(window.Store.getUser());
+  // ユーザープロパティ / user_id は「このページの全イベント(page_view を含む)より必ず前」に
+  // dataLayer へ積む。ページ表示時の push は <head> の assets/js/user.js(GTMスニペットより前)が
+  // 担当する [サーバー注入ポイントの代役]。ここでは重複して push しない。
+  // ログイン / ログアウトで会員状態が変わった直後は、各ページが DL.setUser で積み直す。
 
   // ヘッダー / フッターの描画はDOMの準備後でよい
   if (document.readyState === 'loading') {

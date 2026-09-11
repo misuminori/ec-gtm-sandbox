@@ -12,6 +12,7 @@ GA4 eコマースの推奨イベント（`view_item_list` / `view_item` / `add_t
 ec-gtm-sandbox/
 ├─ index.html        トップ（ヒーロー / カテゴリタイル / おすすめ）
 ├─ list.html         商品一覧（カテゴリ別。?category=women など）
+├─ search.html       検索結果（ヘッダーの検索バーから ?q=キーワード で遷移）
 ├─ product.html      商品詳細 PDP（?id=351001 など。色/サイズ/数量選択）
 ├─ cart.html         カート（数量変更・削除）
 ├─ checkout.html     チェックアウト（お届け先 / 配送 / 支払い）
@@ -21,6 +22,7 @@ ec-gtm-sandbox/
 ├─ assets/
 │  ├─ css/style.css  全画面共通のスタイル
 │  └─ js/
+│     ├─ user.js       <head> 内・GTMより前に user_id / ユーザープロパティを push（サーバー注入の代役）
 │     ├─ data.js       データ層: 商品マスタ（本番のサーバー商品DBの代役）
 │     ├─ store.js      状態層: カート/会員/注文を localStorage で保持（セッション/DBの代役）
 │     ├─ datalayer.js  計測実装層: 要件を dataLayer への push に変換（最重要・要件定義の実装先）
@@ -67,7 +69,8 @@ sed -i '' 's/GTM-XXXXXX/GTM-ABCDE12/g' *.html
 |---|---|---|
 | トップ | index.html | `view_item_list`（おすすめ）、`select_item`（商品クリック） |
 | 一覧 | list.html | `view_item_list`、`select_item` |
-| 商品詳細 | product.html | `view_item`、`add_to_cart` |
+| 検索結果 | search.html | `search`、`view_item_list`（item_list_id=`search_results`）、`select_item` |
+| 商品詳細 | product.html | `view_item`、`add_to_cart`、`add_to_wishlist`（ハートで登録した時だけ） |
 | カート | cart.html | `view_cart`、`remove_from_cart` |
 | チェックアウト | checkout.html | `begin_checkout`、`add_shipping_info`、`add_payment_info` |
 | 完了 | complete.html | `purchase`（リロード再発火を抑止） |
@@ -76,7 +79,8 @@ sed -i '' 's/GTM-XXXXXX/GTM-ABCDE12/g' *.html
 
 補足:
 - `page_view` はGTMのGA4設定タグが自動発火する想定のため、サイト側では手動pushしません。
-- 全ページで `window.DL.setUser()` により `user_id` と `user_properties`（`login_state` / `membership_rank`）を流します。
+- 全ページの `<head>` で `assets/js/user.js` が GTM スニペットより前に `user_id` と `user_properties`（`login_state` / `membership_rank`）を push します（本番ではサーバーがインラインで書き出す箇所の代役）。ログイン／ログアウト直後は `window.DL.setUser()` で再pushします。
+- `search` は GA4 の拡張計測「サイト内検索」（`?q=` を見て `view_search_results` を自動送信）と二重になります。どちらを正にするかは GTM/GA4 側の設定で決める前提です（詳細は `docs/計測要件定義書.md` 2章）。
 - eコマースイベントは push 前に `ecommerce: null` でリセットし、前イベントの `items` 混入を防いでいます。
 
 ## GitHub Pages での公開

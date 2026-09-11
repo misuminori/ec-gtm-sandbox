@@ -9,6 +9,7 @@ window.Store = (function () {
   var K_CART = 'unilo_cart';     // [{id, color, size, qty}]
   var K_USER = 'unilo_user';     // {user_id, name, email, membership_rank, logged_in}
   var K_ORDER = 'unilo_last_order'; // 直近の注文(サンクスページで使用)
+  var K_WISH = 'unilo_wishlist';    // お気に入り [item_id, ...]
 
   function read(key, def) {
     try { return JSON.parse(localStorage.getItem(key)) || def; }
@@ -100,6 +101,21 @@ window.Store = (function () {
 
   function logout() { write(K_USER, { logged_in: false, membership_rank: 'none' }); }
 
+  // ---- お気に入り ----
+  // 本番では会員DBの「お気に入りテーブル」に相当。デモでは localStorage に item_id を並べて持つ。
+  function getWishlist() { return read(K_WISH, []); }
+  function isWished(id) { return getWishlist().indexOf(id) !== -1; }
+  function addWish(id) {
+    var list = getWishlist();
+    if (list.indexOf(id) === -1) { list.push(id); write(K_WISH, list); }
+    return list;
+  }
+  function removeWish(id) {
+    var list = getWishlist().filter(function (x) { return x !== id; });
+    write(K_WISH, list);
+    return list;
+  }
+
   // ---- 注文 ----
   // 本番では transaction_id はサーバーが採番する。デモでは時刻＋乱数で擬似採番。
   function genTransactionId() {
@@ -118,6 +134,7 @@ window.Store = (function () {
     clearCart: clearCart, cartLines: cartLines, cartDLItems: cartDLItems,
     cartValue: cartValue, cartCount: cartCount,
     getUser: getUser, login: login, logout: logout,
+    getWishlist: getWishlist, isWished: isWished, addWish: addWish, removeWish: removeWish,
     genTransactionId: genTransactionId, saveOrder: saveOrder, getLastOrder: getLastOrder,
     isOrderFired: isOrderFired, markOrderFired: markOrderFired
   };
