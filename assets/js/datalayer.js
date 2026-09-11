@@ -102,6 +102,14 @@ window.DL = (function () {
       });
     },
 
+    // お気に入りに追加（登録時のみ。解除時は GA4 推奨イベントが無いので送らない）
+    addToWishlist: function (p, variant) {
+      ecom('add_to_wishlist', {
+        value: window.DATA.effectivePrice(p),
+        items: [toItem(p, { variant: variant })]
+      });
+    },
+
     // カートから削除
     removeFromCart: function (p, quantity, variant) {
       ecom('remove_from_cart', {
@@ -144,6 +152,14 @@ window.DL = (function () {
         coupon: order.coupon || undefined,
         items: order.items
       });
+    },
+
+    // サイト内検索。GA4 推奨イベント search(search_term)。eコマースではないので ecommerce は付けない。
+    // 検索結果の一覧そのものは viewItemList(item_list_id='search_results') が別途送る。
+    // ※ GA4 の拡張計測(「サイト内検索」)が URL の ?q= を見て view_search_results を自動送信するため、
+    //    この search と2本並ぶ。どちらを正にするかは GTM/GA4 側の設定判断(教材の論点)。
+    search: function (term, resultCount) {
+      push({ event: 'search', search_term: term, search_results: resultCount });
     },
 
     // ログイン / 会員登録。cb を渡すと送信完了(または一定時間)後に cb を実行する(遷移用)。

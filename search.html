@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>マイページ | PG-Training (demo)</title>
-<meta name="description" content="会員マイページ">
+<title>検索結果 | PG-Training (demo)</title>
+<meta name="description" content="サイト内検索の結果一覧">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>window.dataLayer = window.dataLayer || []; window.__DL_DEBUG__ = true;</script>
 <!-- user_id / ユーザープロパティを GTM より前に積む [サーバー注入ポイントの代役] -->
@@ -29,45 +29,12 @@
   <nav class="breadcrumb">
     <a href="index.html">HOME</a>
     <span>/</span>
-    <a href="mypage.html">マイページ</a>
+    <span>検索結果</span>
   </nav>
-
-  <h1 class="page-title">マイページ</h1>
-  <p class="page-lead">会員情報のご確認ができます。</p>
-
-  <div class="member-card" id="member-card"></div>
-
-  <div class="qty-row">
-    <button class="btn btn--outline" id="logout">ログアウト</button>
-  </div>
-
-  <p class="note">会員ID(user_id)と会員ランク(membership_rank)は、全ページの head で assets/js/user.js が GTM より前に dataLayer へ積み、GA4のユーザーIDとユーザープロパティとして送信されます。</p>
+  <h1 class="page-title" data-page-title>検索結果</h1>
+  <p class="page-lead" data-page-lead></p>
+  <div id="grid"></div>
 </main>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var u = window.Store.getUser();
-  if (!u.logged_in) { location.replace('login.html'); return; }
-
-  function esc(s) {
-    return String(s == null ? '' : s)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
-  var card = document.getElementById('member-card');
-  card.innerHTML = '' +
-    '<div class="member-row"><span class="k">お名前</span><span>' + esc(u.name) + '</span></div>' +
-    '<div class="member-row"><span class="k">メール</span><span>' + esc(u.email) + '</span></div>' +
-    '<div class="member-row"><span class="k">会員ID</span><span>' + esc(u.user_id) + '</span></div>' +
-    '<div class="member-row"><span class="k">会員ランク</span><span class="badge-rank">' + esc(u.membership_rank) + '</span></div>';
-
-  document.getElementById('logout').addEventListener('click', function () {
-    window.Store.logout();
-    window.DL.setUser(window.Store.getUser());
-    location.href = 'index.html';
-  });
-});
-</script>
 
 <div id="site-footer"></div>
 <script src="assets/js/data.js"></script>
@@ -75,5 +42,33 @@ document.addEventListener('DOMContentLoaded', function () {
 <script src="assets/js/datalayer.js"></script>
 <script src="assets/js/common.js"></script>
 <!-- ページ別ロジックはこの下に1つの<script>で書く -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // 1) 検索語は URL の ?q= から取る（ヘッダーの検索バーが GET で飛ばしてくる）
+  var q = (window.App.getParam('q') || '').trim();
+
+  // 2) 検索（商品名 / カテゴリ / 説明文の部分一致）
+  var items = q ? window.DATA.search(q) : [];
+
+  // 3) タイトル / 件数
+  document.querySelector('[data-page-title]').textContent = q ? '「' + q + '」の検索結果' : '検索結果';
+  document.querySelector('[data-page-lead]').textContent = q ? items.length + '件の商品' : 'キーワードを入力してください';
+
+  // 4) 計測: search（0件でも送る＝「何を探して見つからなかったか」が分析価値になる）
+  //    ※ GA4 の拡張計測「サイト内検索」も ?q= を見て view_search_results を自動送信する。
+  //      2本並ぶのは意図的で、どちらを正にするかを GTM/GA4 側で決める（教材の論点）。
+  if (q) window.DL.search(q, items.length);
+
+  // 5) グリッド描画（view_item_list + 各カードに select_item を仕込む）。0件は文言だけ。
+  var grid = document.getElementById('grid');
+  if (items.length) {
+    window.App.renderProductGrid(grid, items, 'search_results', '検索結果');
+  } else {
+    grid.innerHTML = '<p class="search-empty">' +
+      (q ? '該当する商品が見つかりませんでした。別のキーワードでお試しください。' : 'ヘッダーの検索アイコンからキーワードを入力してください。') +
+      '</p>';
+  }
+});
+</script>
 </body>
 </html>

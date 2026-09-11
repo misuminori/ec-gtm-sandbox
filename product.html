@@ -7,6 +7,8 @@
 <meta name="description" content="商品詳細(PDP)">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>window.dataLayer = window.dataLayer || []; window.__DL_DEBUG__ = true;</script>
+<!-- user_id / ユーザープロパティを GTM より前に積む [サーバー注入ポイントの代役] -->
+<script src="assets/js/user.js"></script>
 <!-- Google Tag Manager (プレースホルダ: GTM-XXXXXX) -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXX');</script>
 <!-- End Google Tag Manager -->
@@ -93,7 +95,13 @@ document.addEventListener('DOMContentLoaded', function () {
             '<button type="button" id="qty-plus">+</button>' +
           '</div>' +
         '</div>' +
-        '<button class="btn btn--primary btn--block" id="add" disabled>カートに入れる</button>' +
+        '<div class="pdp__actions">' +
+          '<button class="btn btn--primary btn--block" id="add" disabled>カートに入れる</button>' +
+          '<button type="button" class="wish-btn' + (window.Store.isWished(p.item_id) ? ' is-on' : '') + '" id="wish"' +
+            ' aria-pressed="' + (window.Store.isWished(p.item_id) ? 'true' : 'false') + '" aria-label="お気に入り" title="お気に入り">' +
+            '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20.5 3.8 12.6a4.6 4.6 0 0 1 6.5-6.5L12 7.8l1.7-1.7a4.6 4.6 0 0 1 6.5 6.5Z"/></svg>' +
+          '</button>' +
+        '</div>' +
         '<div id="add-result"></div>' +
       '</div>' +
     '</div>';
@@ -165,6 +173,24 @@ document.addEventListener('DOMContentLoaded', function () {
     // 続けて買い物できるUX: 遷移せずにカートを見る導線を出す
     addResult.innerHTML =
       '<p class="note">カートに追加しました。 <a href="cart.html">カートを見る</a></p>';
+  });
+
+  // ---- お気に入り ----
+  // 登録: Store に保存 → add_to_wishlist を push（選択中のカラー/サイズがあれば item_variant に載せる）
+  // 解除: Store から外すだけ。GA4 に「お気に入り解除」の推奨イベントは無いので何も送らない。
+  var wishBtn = document.getElementById('wish');
+  wishBtn.addEventListener('click', function () {
+    if (window.Store.isWished(p.item_id)) {
+      window.Store.removeWish(p.item_id);
+      wishBtn.classList.remove('is-on');
+      wishBtn.setAttribute('aria-pressed', 'false');
+      return;
+    }
+    window.Store.addWish(p.item_id);
+    wishBtn.classList.add('is-on');
+    wishBtn.setAttribute('aria-pressed', 'true');
+    var variant = [selectedColor, selectedSize].filter(Boolean).join(' / ');
+    window.DL.addToWishlist(p, variant || undefined);
   });
 
   // ---- 計測: 商品詳細の表示（1回） ----

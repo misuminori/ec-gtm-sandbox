@@ -111,6 +111,17 @@ window.DATA = (function () {
   // トップページのおすすめ（先頭6件）
   function getFeatured() { return products.slice(0, 6); }
 
+  // サイト内検索。商品名 / カテゴリ / サブカテゴリ / 説明文 を部分一致(大文字小文字は無視)。
+  // 本番なら検索API相当。空文字や空白だけなら空配列。
+  function search(q) {
+    var term = (q || '').trim().toLowerCase();
+    if (!term) return [];
+    return products.filter(function (p) {
+      var hay = [p.item_name, p.item_category, p.item_category2, p.desc].join(' ').toLowerCase();
+      return hay.indexOf(term) !== -1;
+    });
+  }
+
   // 実効価格（セールがあればセール価格）
   function effectivePrice(p) { return p.salePrice != null ? p.salePrice : p.price; }
 
@@ -132,6 +143,7 @@ window.DATA = (function () {
     getById: getById,
     getByCategory: getByCategory,
     getFeatured: getFeatured,
+    search: search,
     effectivePrice: effectivePrice,
     shapeOf: shapeOf
   };

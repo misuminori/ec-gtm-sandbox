@@ -93,6 +93,24 @@ ul { margin: 0; padding: 0; list-style: none; }
   position: relative; color: var(--ink); display: inline-flex;
   align-items: center; justify-content: center; line-height: 0;
 }
+button.icon-btn { background: none; border: none; padding: 0; cursor: pointer; }
+.search-toggle[aria-expanded="true"] { color: var(--accent); }
+.search-bar { border-top: 1px solid var(--line); background: var(--bg); }
+.search-bar[hidden] { display: none; }
+.search-bar__inner {
+  max-width: var(--maxw); margin: 0 auto; padding: var(--space-3) var(--space-5);
+  display: flex; gap: var(--space-3);
+}
+.search-bar__input {
+  flex: 1 1 auto; min-width: 0; height: 44px; padding: 0 var(--space-4);
+  border: 1px solid var(--ink); border-radius: var(--radius); font-size: var(--fs-md); background: #fff;
+}
+.search-bar__input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.search-bar__submit {
+  flex: 0 0 auto; height: 44px; padding: 0 var(--space-5); border: none; border-radius: var(--radius);
+  background: var(--ink); color: #fff; font-weight: 700; font-size: var(--fs-sm); cursor: pointer;
+}
+.search-empty { padding: var(--space-6) 0; color: var(--ink-sub); }
 .cart-count {
   position: absolute; top: -6px; right: -8px; min-width: 16px; height: 16px;
   padding: 0 4px; border-radius: 999px; background: var(--accent); color: #fff;
@@ -225,6 +243,16 @@ ul { margin: 0; padding: 0; list-style: none; }
 .btn--block { display: flex; width: 100%; }
 .btn:disabled { background: var(--line); color: var(--ink-sub); cursor: not-allowed; border-color: transparent; }
 .note { font-size: var(--fs-xs); color: var(--ink-sub); margin-top: var(--space-3); }
+.pdp__actions { display: flex; align-items: stretch; gap: var(--space-3); }
+.pdp__actions .btn--block { flex: 1 1 auto; }
+.wish-btn {
+  flex: 0 0 52px; width: 52px; height: 52px; border: 1px solid var(--ink); border-radius: var(--radius);
+  background: #fff; color: var(--ink); display: inline-flex; align-items: center; justify-content: center; line-height: 0;
+}
+.wish-btn svg { fill: none; transition: fill .15s; }
+.wish-btn:hover { background: var(--bg-soft); }
+.wish-btn.is-on { border-color: var(--accent); color: var(--accent); }
+.wish-btn.is-on svg { fill: var(--accent); }
 
 /* ---- カート / 注文サマリー ---- */
 .cart-layout { display: grid; grid-template-columns: 1fr 340px; gap: var(--space-6); align-items: start; }
