@@ -47,14 +47,14 @@ python3 -m http.server 8000
 
 各HTMLの `<head>` にプレースホルダが入っています。実コンテナIDへ置換してください。
 
-- **必須**: 全HTMLの `GTM-XXXXXX` を実際のGTMコンテナIDに置換（GTMスニペット2箇所 + noscriptの計3箇所 / ファイル）。
+- **必須**: 全HTMLの `GTM-WRVJNDG9` を実際のGTMコンテナIDに置換（GTMスニペット2箇所 + noscriptの計3箇所 / ファイル）。
 - **任意**: `G-XXXXXX` を GA4測定IDに置換。これは学習用にコメントアウトされた gtag.js 直接計測の例です。GTM経由のGA4と二重計測になるため、使う場合はGTM側のGA4設定タグを止めること。
 
 一括置換の例:
 
 ```bash
 cd /Users/oohiratakuhito/projects/ec-gtm-sandbox
-sed -i '' 's/GTM-XXXXXX/GTM-ABCDE12/g' *.html
+sed -i '' 's/GTM-WRVJNDG9/GTM-ABCDE12/g' *.html
 ```
 
 ## 計測の確認方法
